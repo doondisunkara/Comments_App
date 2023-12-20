@@ -28,16 +28,23 @@ class Comments extends Component {
     this.setState({commentInput: event.target.value})
   }
 
-  onSubmitComment = () => {
+  onSubmitComment = event => {
+    event.preventDefault()
     const {nameInput, commentInput, commentsList} = this.state
     if (nameInput !== '' && commentInput !== '') {
-      const id = commentsList.length === 0 ? 0 : commentsList[-1].id + 1
+      const n = commentsList.length
+      const id = n === 0 ? 0 : commentsList[n - 1].id + 1
+      const newComment = {
+        id,
+        user: nameInput,
+        comment: commentInput,
+        date: new Date(),
+      }
       this.setState(
         {
-          commentsList: [
-            ...commentsList,
-            {id, user: nameInput, comment: commentInput},
-          ],
+          commentsList: [...commentsList, newComment],
+          nameInput: '',
+          commentInput: '',
         },
         console.log(commentsList),
       )
@@ -55,7 +62,7 @@ class Comments extends Component {
     return (
       <div className="app-container">
         <div className="content-container">
-          <div className="creation-container">
+          <form className="creation-container">
             <h1 className="main-heading">Comments</h1>
             <img
               src="https://assets.ccbp.in/frontend/react-js/comments-app/comments-img.png"
@@ -63,32 +70,32 @@ class Comments extends Component {
               className="comment-img"
             />
             <br />
-            <label htmlFor="nameField">
-              Say something about 4.0 Technologies
-            </label>
+            <p>Say something about 4.0 Technologies</p>
             <input
-              id="nameField"
               type="text"
               className="name-input"
               placeholder="Your Name"
               value={nameInput}
               onChange={this.updateNameInput}
             />
-            <input
+            <textarea
               type="text"
+              rows="8"
               className="comment-input"
               placeholder="Your Comment"
               value={commentInput}
               onChange={this.updateCommentInput}
-            />
+            >
+              .
+            </textarea>
             <button
               className="add-comment-btn"
-              type="button"
+              type="submit"
               onClick={this.onSubmitComment}
             >
               Add Comment
             </button>
-          </div>
+          </form>
           <hr className="separation" />
           <p className="comments-count">
             <span className="count">{commentsList.length}</span> Comments

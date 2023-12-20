@@ -87,7 +87,7 @@
 
 .features-container {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
   width: 100%;
 }
 
@@ -96,6 +96,22 @@
   background-color: transparent;
   cursor: pointer;
   outline: none;
+  padding: 0;
   height: 40px;
-  width: 4px;
+  width: 40px;
+}
+
+.features-img {
+  height: 40px;
+  width: 40px;
+}
+
+.like-txt {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 10px;
+}
+
+.delete-mrg {
+  justify-self: flex-end;
 }

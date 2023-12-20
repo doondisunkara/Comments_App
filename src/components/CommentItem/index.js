@@ -2,8 +2,9 @@ import {Component} from 'react'
 import './index.css'
 
 class CommentItem extends Component {
-  state: {
+  state = {
     isLiked: false,
+    timeAgo: 'few',
   }
 
   updateLikeUrl = () => {
@@ -11,7 +12,7 @@ class CommentItem extends Component {
   }
 
   render() {
-    const {isLiked} = this.state
+    const {isLiked, timeAgo} = this.state
     const {commentDetails, onDeleteComment} = this.props
     const {id, user, comment} = commentDetails
     const userFirst = user.slice(0, 1)
@@ -30,30 +31,32 @@ class CommentItem extends Component {
           <div className="comment-details">
             <div className="commented-time">
               <h1 className="commented-user">{user}</h1>
-              <span className="time">2 minutes ago</span>
+              <p className="time">{`${timeAgo} minutes ago`}</p>
             </div>
             <p className="comment-content">{comment}</p>
           </div>
-          <div className="features-container">
-            <button
-              type="button"
-              className="features-btn"
-              onClick={this.updateLikeUrl}
-            >
-              <img src={likeImgUrl} alt="like" />
-            </button>
-            <p>Like</p>
-            <button
-              type="button"
-              className="features-btn"
-              onClick={deleteComment()}
-            >
-              <img
-                src="https://assets.ccbp.in/frontend/react-js/comments-app/delete-img.png"
-                alt="delete"
-              />
-            </button>
-          </div>
+        </div>
+        <div className="features-container">
+          <button
+            type="button"
+            className="features-btn"
+            onClick={this.updateLikeUrl}
+          >
+            <img src={likeImgUrl} alt="like" className="feature-img" />
+          </button>
+          <p className="like-txt">Like</p>
+          <button
+            data-testid="delete"
+            type="button"
+            className="features-btn delete-mrg"
+            onClick={deleteComment}
+          >
+            <img
+              src="https://assets.ccbp.in/frontend/react-js/comments-app/delete-img.png"
+              alt="delete"
+              className="feature-img"
+            />
+          </button>
         </div>
       </li>
     )
