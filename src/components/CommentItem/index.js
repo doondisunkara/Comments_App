@@ -1,66 +1,68 @@
-import {Component} from 'react'
+import {formatDistanceToNow} from 'date-fns'
+
 import './index.css'
 
-class CommentItem extends Component {
-  state = {
-    isLiked: false,
-    timeAgo: 'few',
+const CommentItem = props => {
+  const {commentDetails} = props
+  const {id, name, comment, isLiked, initialClassName, date} = commentDetails
+  const initial = name ? name[0].toUpperCase() : ''
+  const likeTextClassName = isLiked ? 'button active' : 'button'
+  const likeImageUrl = isLiked
+    ? 'https://assets.ccbp.in/frontend/react-js/comments-app/liked-img.png'
+    : 'https://assets.ccbp.in/frontend/react-js/comments-app/like-img.png'
+  const postedTime = formatDistanceToNow(date)
+
+  const onClickLike = () => {
+    const {toggleIsLiked} = props
+    toggleIsLiked(id)
   }
 
-  updateLikeUrl = () => {
-    this.setState(prev => ({isLiked: !prev.isLiked}))
+  const onDeleteComment = () => {
+    const {deleteComment} = props
+    deleteComment(id)
   }
 
-  render() {
-    const {isLiked, timeAgo} = this.state
-    const {commentDetails, onDeleteComment} = this.props
-    const {id, user, comment} = commentDetails
-    const userFirst = user.slice(0, 1)
-    const likeImgUrl = isLiked
-      ? 'https://assets.ccbp.in/frontend/react-js/comments-app/liked-img.png'
-      : 'https://assets.ccbp.in/frontend/react-js/comments-app/like-img.png'
-    const deleteComment = () => {
-      onDeleteComment(id)
-    }
-    return (
-      <li className="comment-item">
-        <div className="comment-container">
-          <div className="user-icon amber">
-            <p className="letter-icon">{userFirst}</p>
-          </div>
-          <div className="comment-details">
-            <div className="commented-time">
-              <h1 className="commented-user">{user}</h1>
-              <p className="time">{`${timeAgo} minutes ago`}</p>
-            </div>
-            <p className="comment-content">{comment}</p>
-          </div>
+  return (
+    <li className="comment-item">
+      <div className="comment-container">
+        <div className={initialClassName}>
+          <p className="initial">{initial}</p>
         </div>
-        <div className="features-container">
+        <div>
+          <div className="username-time-container">
+            <p className="username">{name}</p>
+            <p className="time">{postedTime} ago</p>
+          </div>
+          <p className="comment">{comment}</p>
+        </div>
+      </div>
+      <div className="buttons-container">
+        <div className="like-container">
+          <img src={likeImageUrl} alt="like" className="like-image" />
           <button
+            className={likeTextClassName}
             type="button"
-            className="features-btn"
-            onClick={this.updateLikeUrl}
+            onClick={onClickLike}
           >
-            <img src={likeImgUrl} alt="like" className="feature-img" />
-          </button>
-          <p className="like-txt">Like</p>
-          <button
-            data-testid="delete"
-            type="button"
-            className="features-btn delete-mrg"
-            onClick={deleteComment}
-          >
-            <img
-              src="https://assets.ccbp.in/frontend/react-js/comments-app/delete-img.png"
-              alt="delete"
-              className="feature-img"
-            />
+            Like
           </button>
         </div>
-      </li>
-    )
-  }
+        <button
+          className="button"
+          type="button"
+          onClick={onDeleteComment}
+          data-testid="delete"
+        >
+          <img
+            className="delete"
+            src="https://assets.ccbp.in/frontend/react-js/comments-app/delete-img.png"
+            alt="delete"
+          />
+        </button>
+      </div>
+      <hr className="comment-line" />
+    </li>
+  )
 }
 
 export default CommentItem
